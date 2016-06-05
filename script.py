@@ -27,7 +27,7 @@ def proxyParser():
 		queue_url.put(url)
 
 	#  Create threads
-	threads = [MyThread(queue_url, proxy[0], proxy[1]) for proxy in proxy_list if checkProxy(proxy[0])]
+	threads = [MyThread(queue_url, proxy[0], proxy[1]) for proxy in proxy_list if checkProxy(proxy[0], proxy[1])]
 	for thread in threads:
 		thread.start()
 
@@ -49,11 +49,11 @@ def correctTimeThread(threads, queue):
 				thread.must_wait = True
 
 
-def checkProxy(proxy, url='https://www.google.ru/'):
+def checkProxy(proxy, proxy_userpwd, url='https://www.google.ru/'):
 	if proxy:
 		try:
 			g = Grab()
-			g.setup(proxy=proxy)
+			g.setup(proxy=proxy, proxy_userpwd=proxy_userpwd)
 			g.go(url)
 			return 1
 		except Exception:
