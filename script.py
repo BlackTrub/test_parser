@@ -18,9 +18,8 @@ def proxyParser():
 	proxy_data = ProxyModel.objects.all()
 	proxy_list = []
 	for proxy in proxy_data:
-		if proxy.proxy_login and proxy.proxy_password:
-			proxy_list.append([proxy.proxy_addres + ':' + str(proxy.proxy_port), 
-							  proxy.proxy_login + ':' + proxy.proxy_password])
+		proxy_list.append([proxy.proxy_addres + ':' + str(proxy.proxy_port), 
+						   proxy.proxy_login + ':' + proxy.proxy_password])
 
 	#  Append URL in queue
 	queue_url = Queue()
@@ -77,6 +76,7 @@ class MyThread(threading.Thread):
 	def actionURL(self, url):
 		self.count += 1
 		self.grab_obj.go(url)
+		#  Add data from URL to DataModel
 		DataModel.objects.create(data_value=self.grab_obj.response.unicode_body())
 
 	def run(self):
